@@ -1,5 +1,21 @@
 # RobotHAL → FreeRTOS 教学式移植 实施计划
 
+
+> ### 关于文中的目录名
+>
+> 本文档写于 2026-09-30 重构过程中，当时的目录命名与现在仓库中的不一致。
+> **正文保留原样（作为工作记录），对应关系如下：**
+>
+> | 文中名称 | 现仓库位置 | 说明 |
+> |---|---|---|
+> | `RobotHAL_RTOS_Lab/` | `MCU-HAL-RTOS/` | HAL + FreeRTOS 版（本次重构产物） |
+> | ├ Keil 工程 | `MCU-HAL-RTOS/MDK-ARM/TreeWhitewash_RTOS.uvprojx` | 后续去掉了 "Lab" 后缀 |
+> | `RobotHAL/` | `MCU-HAL/` | HAL 裸机版（重构的起点） |
+> | ├ Keil 工程 | `MCU-HAL/MDK-ARM/RobotHAL.uvprojx` | 文件名未变 |
+> | `RobotHAL_RTOS/` | — | 当时的 CMSIS-RTOS2 参考构建，**未收录本仓库** |
+>
+> 文中出现的命令（如 `cp -r RobotHAL RobotHAL_RTOS_Lab`）是当时实际执行的原始记录。
+
 > **给执行者：** 这是一个**教学计划**，不是自动化任务清单。每一步由**用户本人操作**，执行者（Claude）负责讲"为什么"、给出该写的代码、跑编译验证。步骤用 `- [ ]` 跟踪。
 
 **Goal:** 从 `RobotHAL`（HAL 裸机）复制出 `RobotHAL_RTOS_Lab`，用原生 FreeRTOS API 把 `app_loop()` 的 `while(1)` 拆成多任务，过程中把 FreeRTOS 的核心概念讲透。

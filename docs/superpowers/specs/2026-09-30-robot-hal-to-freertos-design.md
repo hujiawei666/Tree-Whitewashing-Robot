@@ -1,5 +1,21 @@
 # RobotHAL → FreeRTOS 教学式移植：设计与大纲
 
+
+> ### 关于文中的目录名
+>
+> 本文档写于 2026-09-30 重构过程中，当时的目录命名与现在仓库中的不一致。
+> **正文保留原样（作为工作记录），对应关系如下：**
+>
+> | 文中名称 | 现仓库位置 | 说明 |
+> |---|---|---|
+> | `RobotHAL_RTOS_Lab/` | `MCU-HAL-RTOS/` | HAL + FreeRTOS 版（本次重构产物） |
+> | ├ Keil 工程 | `MCU-HAL-RTOS/MDK-ARM/TreeWhitewash_RTOS.uvprojx` | 后续去掉了 "Lab" 后缀 |
+> | `RobotHAL/` | `MCU-HAL/` | HAL 裸机版（重构的起点） |
+> | ├ Keil 工程 | `MCU-HAL/MDK-ARM/RobotHAL.uvprojx` | 文件名未变 |
+> | `RobotHAL_RTOS/` | — | 当时的 CMSIS-RTOS2 参考构建，**未收录本仓库** |
+>
+> 文中出现的命令（如 `cp -r RobotHAL RobotHAL_RTOS_Lab`）是当时实际执行的原始记录。
+
 - 日期：2026-09-30
 - 学习材料：百问网《FreeRTOS 入门与工程实践》 https://rtos.100ask.net/docs/DShanMCU-F103/ （19 章，已通读）
 - 参考实现：`RobotHAL_RTOS\`（已有，2026-09-30 06:03 编译通过，用的是 CMSIS-RTOS2）
