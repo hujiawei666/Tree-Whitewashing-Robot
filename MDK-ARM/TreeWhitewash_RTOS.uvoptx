@@ -22,7 +22,7 @@
   </DaveTm>
 
   <Target>
-    <TargetName>RobotHAL_RTOS_Lab</TargetName>
+    <TargetName>TreeWhitewash_RTOS</TargetName>
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>

@@ -3,8 +3,8 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'RobotHAL_RTOS_Lab' 
- * Target:  'RobotHAL_RTOS_Lab' 
+ * Project: 'TreeWhitewash_RTOS' 
+ * Target:  'TreeWhitewash_RTOS' 
  */
 
 #ifndef RTE_COMPONENTS_H

@@ -20,7 +20,7 @@
 *.uvguix.*
 
 # Keil 的构建输出目录(以工程名命名,里面全是上面的产物)
-MDK-ARM/RobotHAL_RTOS_Lab/
+MDK-ARM/TreeWhitewash_RTOS/
 bare-metal/MDK-ARM/RobotHAL/
 
 # Keil 自动生成的配置(每人机器不同,传了反而干扰)
