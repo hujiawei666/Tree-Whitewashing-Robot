@@ -2,15 +2,6 @@
  ******************************************************************************
  * @file    app_tasks.h
  * @brief   把原来的裸机主循环拆成 FreeRTOS 任务
- *
- * 【为什么需要这个文件】
- *   加了 FreeRTOS 之后,CubeMX 生成的 main() 变成:
- *     osKernelInitialize();  MX_FREERTOS_Init();  osKernelStart();
- *   osKernelStart() 不会返回,它后面的 while(1) 是死代码。
- *   原来的 app_loop() 就搬到本文件创建的任务里。
- *
- * 【栈大小的单位】
- *   原生 xTaskCreate 的 usStackDepth 单位是 word(4 字节),不是字节。
  ******************************************************************************
  */
 #ifndef __APP_TASKS_H

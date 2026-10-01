@@ -3,27 +3,7 @@
  * @file    bsp_stepper.c
  * @brief   步进电机实现(TIM8 单脉冲 + 重复计数,T 型加减速)
  *
- * 迁移自 code/driver.c。改动:
- *
- *   1. Driver_Init() / TIM8_OPM_RCR_Init() 删除
- *      —— GPIO(PE5/PE6/PC7)与 TIM8 的时基/OC/OPM/NVIC 全由 CubeMX 完成
- *         (你已核对:PSC=167 / ARR=999 / RCR=0 / ARR preload=Enable / One Pulse Mode 已勾)。
- *      保留 bsp_stepper_init() 做两件事:启动 PWM + **补 URS 位**(CubeMX 配不了)。
- *
- *   2. TIM8_UP_TIM13_IRQHandler -> bsp_stepper_on_period_elapsed()
- *      由 main.c 的 HAL_TIM_PeriodElapsedCallback 转发(那个名字归 CubeMX 所有)。
- *      中断内的算法逻辑**逐字保留**。
- *
- *   3. 寄存器操作换成 HAL 宏:
- *        TIM_CtrlPWMOutputs(TIM8, E/D)      -> __HAL_TIM_MOE_ENABLE/DISABLE(&htim8)
- *        TIM_Cmd(TIM8, E/D)                 -> __HAL_TIM_ENABLE/DISABLE(&htim8)
- *        TIM_SetAutoreload(TIM8, v)         -> __HAL_TIM_SET_AUTORELOAD(&htim8, v)
- *        TIM_SetCompare2(TIM8, v)           -> __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_2, v)
- *        TIM_SetCounter(TIM8, 0)            -> __HAL_TIM_SET_COUNTER(&htim8, 0)
- *        TIM_GenerateEvent(TIM8, Update)    -> HAL_TIM_GenerateEvent(&htim8, TIM_EVENTSOURCE_UPDATE)
- *      只有 RCR 保持**直接写寄存器**(htim8.Instance->RCR)—— HAL 没有对应宏。
- *
- *   4. 唤醒脉冲循环里的 GPIO_SetBits/ResetBits(GPIOC, Pin_7) 改为 HAL_GPIO_WritePin。
+
  ******************************************************************************
  */
 
@@ -45,7 +25,7 @@ T_Profile t_profile;
 void bsp_stepper_init(void)
 {
     /*
-     * [!] 手写补一条 CubeMX 配不了的位:CR1 的 URS(Update Request Source)
+     * CubeMX 配不了的位:CR1 的 URS(Update Request Source)
      *
      * 原工程在 TIM8_OPM_RCR_Init() 里有:
      *     TIM_UpdateRequestConfig(TIM8, TIM_UpdateSource_Regular);
@@ -68,7 +48,7 @@ void bsp_stepper_init(void)
 }
 
 /* ===========================================================================
- * T 型速度曲线参数计算(原样保留)
+ * T 型速度曲线参数计算
  * =========================================================================== */
 static void T_Profile_Init(long steps, float start_freq, float max_freq, float accel)
 {
@@ -149,7 +129,7 @@ void Enable_Acceleration(u8 enable)
 }
 
 /* ===========================================================================
- * 更新中断:加减速算法核心(逻辑逐字保留)
+ * 更新中断:加减速算法核心
  * =========================================================================== */
 void bsp_stepper_on_period_elapsed(TIM_HandleTypeDef *htim)
 {

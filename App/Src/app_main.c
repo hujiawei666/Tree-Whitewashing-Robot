@@ -3,36 +3,7 @@
  * @file    app_main.c
  * @brief   应用层 —— 迁移自 USER/main.c(815 行)
  *
- * 【本次迁移做的事】
- *
- *   1. 初始化段里的 xxx_Init() 全部换掉(细节见 app_init()):
- *        delay_init(168)          -> delay_init()          (DWT 版,不再需要传主频)
- *        uart_init(115200)        -> bsp_usart1_init()
- *        uart3_init(115200)       -> bsp_usart3_init()
- *        PS2_Init()               -> bsp_ps2_init()
- *        SG90_Init()              -> bsp_servo_init()
- *        DC_MOTOR_GPIO_Config()   -> bsp_motor_init()
- *        TIM7_Int_Init(999,83)    -> bsp_tick_init()
- *        TIM5_Cap_Init(...)       -> bsp_ultrasonic_init()
- *        TIM8_OPM_RCR_Init(...)   -> bsp_stepper_init()
- *        Driver_Init()            -> 删除(只配 GPIO,CubeMX 已做)
- *        Hcsr04_Init()            -> 删除(同上)
- *        BEEP_Init/KEY_Init/LED_Init() -> 删除(同上)
- *        NVIC_PriorityGroupConfig() -> 删除(CubeMX 统一设为 Group_4)
- *
- *   2. 引脚操作 API:
- *        GPIO_WriteBit(GPIOE, GPIO_Pin_3, Bit_SET) -> HAL_GPIO_WritePin(GPIOE, GPIO_PIN_3, GPIO_PIN_SET)
- *        GPIO_WriteBit(GPIOE, GPIO_Pin_7, Bit_RESET) -> ... GPIO_PIN_RESET
- *      位带别名(BEEP / Left_TRIG_Send 等)不变。
- *
- *   3. main() 拆成 app_init() + app_loop(),由 CubeMX 的 main.c 通过
- *      USER CODE 区调用(那样才不会被重新生成覆盖)。
- *
- *   4. TIM7_IRQHandler 删除 —— 已迁到 bsp_tick.c 的 bsp_tick_on_period_elapsed()。
- *
- *   5. system_time_ms 删除定义 —— 现在归 bsp_tick.c 所有,这里通过 bsp_tick.h 取用。
- *
- * 【业务逻辑本身一字未改】:状态机、HMI 协议、PS2 处理、超声波轮询流程全部照搬。
+
  ******************************************************************************
  */
 
@@ -101,7 +72,7 @@ static uint32_t      scan_duration  = 500;     /* 扫描换向间隔(ms) */
 //static u8            ProtocolString[80] = {0};
 //static uint8_t       i, j;
 static uint8_t       q = SAFE_ANGLE;           /* 舵机角度 */
-static u8            len;
+static uint8_t           len;
 //static uint32_t      last_count = 0;
 static volatile uint8_t is_motor_moving = 0;
 

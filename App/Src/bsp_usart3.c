@@ -4,13 +4,6 @@
  * @brief   USART3 收发
  *
  * 迁移自 code/usart3.c。改动:
- *   1. uart3_init() 删除 —— RCC/GPIO/USART_Init/NVIC 由 MX_USART3_UART_Init() 接管;
- *      保留 bsp_usart3_init() 做 HAL 的"接收上膛"。
- *   2. USART3_IRQHandler -> bsp_usart3_on_rx()(由 bsp_usart1.c 里的共用回调分派)。
- *   3. USART3_SendChar 内部由"直接写寄存器"改为 HAL_UART_Transmit。
- *   4. 帧解析逻辑**逐字保留** —— 注意它和 USART1 的规则**不一样**:
- *      USART1 要求 0x0D 后必须跟 0x0A;
- *      USART3 允许单独收到 0x0A 也强行结束一帧(更宽松,容忍异常)。
  ******************************************************************************
  */
 

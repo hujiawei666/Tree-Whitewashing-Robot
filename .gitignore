@@ -20,11 +20,12 @@
 *.uvguix.*
 
 # Keil 的构建输出目录(以工程名命名,里面全是上面的产物)
-MDK-ARM/RobotHAL/
 MDK-ARM/RobotHAL_RTOS_Lab/
+bare-metal/MDK-ARM/RobotHAL/
 
 # Keil 自动生成的配置(每人机器不同,传了反而干扰)
 MDK-ARM/DebugConfig/
+bare-metal/MDK-ARM/DebugConfig/
 
 # ============================================================
 #  本地临时文件
@@ -33,11 +34,11 @@ cli_build.log
 *.log
 
 # ============================================================
-#  本仓库只发布 "HAL 版" 和 "HAL+FreeRTOS 版"
-#  其余本地资料不入库
+#  本仓库发布的是 "HAL + FreeRTOS 版"(根目录)
+#  和 "HAL 裸机版"(bare-metal/),其余本地资料不入库
 # ============================================================
-/主控代码/
 /RobotHAL_RTOS/
+/主控代码/
 /k230/
 /docs/
 /*.docx

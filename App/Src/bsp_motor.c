@@ -5,22 +5,6 @@
  *
  * 迁移自 code/DC_MOTOR.c。改动:
  *
- *   1. DC_MOTOR_GPIO_Config() 删除
- *      —— 它内部是 TIM4 的时钟/时基/四路 OC 配置 + GPIOC 方向脚配置,全是标准库 API。
- *         迁移后由 CubeMX 的 MX_TIM4_Init() 与 MX_GPIO_Init() 完成
- *         (你已核对:PSC=71 / ARR=999 / ARR preload=Enable / 四路均为 PWM mode 1)。
- *      保留 bsp_motor_init() —— HAL 的 PWM 输出是**通道粒度**启动的,要启 4 次。
- *
- *   2. TIM_SetCompare1~4(TIM4, n) -> __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_x, n)
- *
- *   3. 方向宏 INA1~INB8 内部由 GPIO_Set/ResetBits 改为 HAL_GPIO_WritePin
- *      (宏定义在 bsp_motor.h;**调用点的写法一处都不用改**)。
- *
- *   4. 删除了 PWM_Control() 与 Analog_stick_model() —— 它们全工程无调用点,
- *      且其功能已被 main.c 里的 app_ps2_deal() 取代(死代码)。
- *      正本保留在 主控代码/code/DC_MOTOR.c 供对照。
- *
- *   5. Car_* 这一组整车动作函数**逐字保留**(它们是底盘的动作集,自动模式以后可能用)。
  ******************************************************************************
  */
 

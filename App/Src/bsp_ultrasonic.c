@@ -3,25 +3,6 @@
  * @file    bsp_ultrasonic.c
  * @brief   超声波回波捕获实现(TIM5 三路输入捕获)
  *
- * 迁移自 code/time.c。相对原版有三处**结构性**改动,都是为了适配 HAL 的回调模型:
- *
- *   1. TIM5_Cap_Init() 删除
- *      —— GPIO 复用 / TIM5 时基 / 三路 TIM_ICInit / NVIC 全由 MX_TIM5_Init() 完成。
- *      保留 bsp_ultrasonic_init() 做"启动",且**必须启动两类中断**:
- *         三路捕获(HAL_TIM_IC_Start_IT)×3
- *         溢出计数(HAL_TIM_Base_Start_IT)×1   ← 容易漏
- *
- *   2. 原来一个 TIM5_IRQHandler 里既有"更新事件"又有"捕获事件";
- *      HAL 把它们拆成了两个回调:
- *         溢出 -> bsp_ultrasonic_on_period_elapsed()
- *         捕获 -> bsp_ultrasonic_on_capture()   ← 还要用 htim->Channel 区分三路
- *
- *   3. 三路通道的处理逻辑原本是**复制粘贴三遍**的(每遍约 30 行,只有通道号不同)。
- *      这里抽成一个静态函数 capture_one() 调用三次 —— **逻辑逐字照搬 CH1 那一份**,
- *      只是把通道号参数化。行为完全一致,且不会出现"改了两路忘了第三路"。
- *
- *   4. 标志清除:原版末尾要手工 TIM_ClearITPendingBit(...);HAL 已经在内部清好了,
- *      所以这里**不需要**(也不需要手动查 TIM_GetITStatus —— 能进回调就说明标志是置位的)。
  ******************************************************************************
  */
 
