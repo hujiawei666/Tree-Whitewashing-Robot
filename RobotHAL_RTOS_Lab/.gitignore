@@ -1,0 +1,6 @@
+# Keil 构建产物
+MDK-ARM/RobotHAL_RTOS_Lab/
+MDK-ARM/DebugConfig/
+MDK-ARM/*.uvguix.*
+MDK-ARM/*.log
+MDK-ARM/*.lst
